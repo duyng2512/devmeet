@@ -77,4 +77,49 @@ router.post(
   }
 );
 
+// @route           POST api/users/google
+// @description:    Register new User via Google Oauth
+// access:          Public
+router.post('/google', async (req, res) => {
+  // Finds the validation errors in this request and wraps them in an object with handy functions
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+  const { name, email, avatar } = req.body;
+
+  try {
+    /** See if user exist */
+    let user = await User.findOne({ email });
+    if (!user) {
+      /** User exist then turn to Login function  */
+      user = new User({
+        name,
+        email,
+        avatar,
+      });
+
+      await user.save();
+    }
+
+    /** Return json Webtoken */
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+    // Getting secret from config object
+    const jwtSecret = config.get('jwtSecret');
+    jwt.sign(payload, jwtSecret, { expiresIn: 36000 }, (err, token) => {
+      if (err) throw err;
+      res.json({ token });
+    });
+
+    //res.send('User Register');
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server err');
+  }
+});
+
 module.exports = router;

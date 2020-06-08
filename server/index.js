@@ -45,8 +45,8 @@ app.get('/test', function (req, res) {
 app.get('/test/google', function (req, res) {
   res.render('index_google.html');
 });
-app.get('/secret', function (req, res) {
-  res.render('index_google.html');
+app.get('/test/error', function (req, res) {
+  res.render('err.html');
 });
 
 /** Define Route */
