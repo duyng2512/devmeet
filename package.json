@@ -12,8 +12,6 @@
     "backend": "nodemon server/index.js",
     "frontend": "npm run start --prefix client",
   },
-  "author": "Cong Duy",
-  "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.6",
     "bcryptjs": "^2.4.3",
