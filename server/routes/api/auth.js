@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
+const authGoogle = require('../../middleware/authGoogle');
 const User = require('../../models/User');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
 // @route           GET api/auth
 // @description:    Return Token Authentication
@@ -69,5 +71,50 @@ router.post(
     }
   }
 );
+
+// @route           GET api/auth/google
+// @description:    Login Authetication by Google
+// access:          Public
+router.get(
+  '/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+  })
+);
+
+// @route           GET api/auth/google/callback
+// @description:    Middleware for google get user data
+// access:          Public
+router.get('/google/callback', passport.authenticate('google'), (req, res) => {
+  res.redirect('/api/auth/google/user');
+});
+
+// @route           GET api/auth/google/user
+// @description:    Send token
+// access:          Public
+router.get('/google/user', authGoogle, (req, res) => {
+  try {
+    const payload = {
+      user: {
+        id: req.user._id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      config.get('jwtSecret'),
+      {
+        expiresIn: 36000,
+      },
+      (err, token) => {
+        if (err) throw err;
+        res.send({ token });
+      }
+    );
+  } catch (error) {
+    console.error(err.message);
+    res.status(500).send('Server error !');
+  }
+});
 
 module.exports = router;

@@ -20,76 +20,16 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-8 mt-3">
-          <h4>Node.js upload images</h4>
-
-          <form
-            class="mt-4"
-            action="http://localhost:5000/api/image/upload"
-            method="POST"
-            enctype="multipart/form-data"
-          >
-            <div class="form-group">
-              <input
-                type="file"
-                name="file"
-                id="input-files"
-                class="form-control-file border"
-              />
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-        </div>
-        <div class="col-sm-4 mt-3">
-          <h4>PDF Reader</h4>
-
-          <form
-            class="mt-4"
-            action="http://localhost:5000/api/image/upload"
-            method="POST"
-            enctype="multipart/form-data"
-          >
-            <div class="form-group">
-              <input
-                type="file"
-                name="file"
-                id="input-files"
-                class="form-control-file border"
-              />
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-        </div>
-      </div>
-      <hr />
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="preview-images"></div>
+          <h1>Hello World</h1>
+          <button class="btn btn-primary">Login</button>
+          <a href="http://localhost:5000/api/auth/google">
+            <button class="btn btn-danger">GOOGLE +</button>
+          </a>
         </div>
       </div>
     </div>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        let imagesPreview = function (input, placeToInsertImagePreview) {
-          if (input.files) {
-            let filesAmount = input.files.length;
-            for (i = 0; i < filesAmount; i++) {
-              let reader = new FileReader();
-              reader.onload = function (event) {
-                $($.parseHTML('<img>'))
-                  .attr('src', event.target.result)
-                  .appendTo(placeToInsertImagePreview);
-              };
-              reader.readAsDataURL(input.files[i]);
-            }
-          }
-        };
-        $('#input-files').on('change', function () {
-          imagesPreview(this, 'div.preview-images');
-        });
-      });
-    </script>
   </body>
 </html>
